@@ -5,7 +5,7 @@ const Spot = ({ spot }) => {
 
   return (
     <li className='spot'>
-      {spot.content} 
+      {spot.activity} at {spot.location} 
     </li>
   )
 }

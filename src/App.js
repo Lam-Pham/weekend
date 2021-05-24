@@ -4,11 +4,12 @@ import spotService from './services/spots'
 
 const App = () => {
   const [spots, setSpots] = useState([])
-  const [newSpot, setNewSpot] = useState('')
+  const [newActivity, setNewActivity] = useState('')
+  const [newLocation, setNewLocation] = useState('')
 
   useEffect(() => {
     spotService
-      .getAll2()
+      .getAll()
       .then(initialSpots => {
       setSpots(initialSpots)
     })
@@ -17,7 +18,8 @@ const App = () => {
   const addSpot = (event) => {
     event.preventDefault()
     const spotObject = {
-      content: newSpot,
+      activity: newActivity,
+      location: newLocation,
       date: new Date().toISOString(),
     }
 
@@ -25,13 +27,19 @@ const App = () => {
       .create(spotObject)
         .then(returnedSpot => {
         setSpots(spots.concat(returnedSpot))
-        setNewSpot('')
+        setNewActivity('')
+        setNewLocation('')
       })
   }
 
-  const handleSpotChange = (event) => {
+  const handleActivityChange = (event) => {
     console.log(event.target.value)
-    setNewSpot(event.target.value)
+    setNewActivity(event.target.value)
+  }
+
+  const handleLocationChange = (event) => {
+    console.log(event.target.value)
+    setNewLocation(event.target.value)
   }
 
   return (
@@ -47,8 +55,14 @@ const App = () => {
       </ul>
       <form onSubmit={addSpot}>
         <input
-          value={newSpot}
-          onChange={handleSpotChange}
+          value={newActivity}
+          onChange={handleActivityChange}
+          placeholder="activity"
+        />
+        <input
+          value={newLocation}
+          onChange={handleLocationChange}
+          placeholder="location"
         />
         <button type="submit">save</button>
       </form>  
