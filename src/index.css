@@ -1,10 +1,3 @@
-h1 {
-  color: blue;
-  font-style: italic;
-}
-
-.spot {
-  color: rgb(121, 57, 57);
-  padding-top: 3px;
-  font-size: 15px;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
