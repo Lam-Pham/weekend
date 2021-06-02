@@ -1,7 +1,5 @@
 
-import React from 'react'
-
-const Spot = ({ spot }) => {
+export default function Spot ({ spot }) {
 
   return (
     <li className='spot'>
@@ -9,5 +7,3 @@ const Spot = ({ spot }) => {
     </li>
   )
 }
-
-export default Spot
