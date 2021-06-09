@@ -20,6 +20,20 @@ const App = () => {
 
   const handleLogin = (event) => {
     event.preventDefault()
+
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
     console.log('logging in with', username, password)
   }
 
@@ -50,10 +64,8 @@ const App = () => {
     setNewLocation(event.target.value)
   }
 
-  return (
-    <Container>
-      <h1>Spots</h1>
-      <form onSubmit={handleLogin}>
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
         <div>
           username
             <input
@@ -74,6 +86,33 @@ const App = () => {
         </div>
         <button type="submit">login</button>
       </form>
+  )
+
+  const spotForm = () => (
+    <form onSubmit={addSpot}>
+      <input
+        value={newActivity}
+        onChange={handleActivityChange}
+        placeholder="activity"
+      />
+      <input
+        value={newLocation}
+        onChange={handleLocationChange}
+        placeholder="location"
+      />
+      <button type="submit">save</button>
+    </form>  
+  )
+
+  return (
+    <Container>
+      <h1>Spots</h1>
+
+      {user === null ?
+        loginForm() : 
+        spotForm()
+      }
+
       <ul>
         {spots.map(spot => 
             <Spot
@@ -82,19 +121,6 @@ const App = () => {
             />
         )}
       </ul>
-      <form onSubmit={addSpot}>
-        <input
-          value={newActivity}
-          onChange={handleActivityChange}
-          placeholder="activity"
-        />
-        <input
-          value={newLocation}
-          onChange={handleLocationChange}
-          placeholder="location"
-        />
-        <button type="submit">save</button>
-      </form>  
     </Container>
   )
 }
