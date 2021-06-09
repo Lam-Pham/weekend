@@ -18,6 +18,15 @@ const App = () => {
     })
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedSpotappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = (event) => {
     event.preventDefault()
 
@@ -25,6 +34,11 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+
+      window.localStorage.setItem(
+        'loggedSpotappUser', JSON.stringify(user)
+      ) 
+      spotService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
