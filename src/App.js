@@ -110,7 +110,10 @@ const App = () => {
 
       {user === null ?
         loginForm() : 
-        spotForm()
+        <div>
+          <p>Hello, {user.name}</p>
+          {spotForm()}
+        </div>
       }
 
       <ul>
