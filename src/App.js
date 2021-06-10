@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Container from './components/Container'
 import Spot from './components/Spot'
+import LoginForm from './components/LoginForm'
 import spotService from './services/spots'
+import loginService from './services/login'
 
 const App = () => {
   const [spots, setSpots] = useState([])
@@ -9,6 +11,8 @@ const App = () => {
   const [newLocation, setNewLocation] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
+  const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     spotService
@@ -23,11 +27,11 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      noteService.setToken(user.token)
+      spotService.setToken(user.token)
     }
   }, [])
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
@@ -43,10 +47,6 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
     }
     console.log('logging in with', username, password)
   }
@@ -78,29 +78,28 @@ const App = () => {
     setNewLocation(event.target.value)
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-        <div>
-          username
-            <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
-        <div>
-          password
-            <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
           />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
-        <button type="submit">login</button>
-      </form>
-  )
+      </div>
+    )
+}
 
   const spotForm = () => (
     <form onSubmit={addSpot}>
@@ -120,24 +119,26 @@ const App = () => {
 
   return (
     <Container>
-      <h1>Spots</h1>
+      <div class="block space-y-8">
+        <h1 class="font-bold">Weekend</h1>
 
-      {user === null ?
-        loginForm() : 
-        <div>
-          <p>Hello, {user.name}</p>
-          {spotForm()}
-        </div>
-      }
+        {user === null ?
+          loginForm() : 
+          <div>
+            <p>Hello, {user.name}</p>
+            {spotForm()}
+          </div>
+        }
 
-      <ul>
-        {spots.map(spot => 
-            <Spot
-              key={spot.id}
-              spot={spot} 
-            />
-        )}
-      </ul>
+        <ul class="list-decimal list-inside">
+          {spots.map(spot => 
+              <Spot
+                key={spot.id}
+                spot={spot} 
+              />
+          )}
+        </ul>
+      </div>
     </Container>
   )
 }
