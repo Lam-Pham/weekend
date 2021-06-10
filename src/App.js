@@ -1,33 +1,33 @@
 import React, { useState, useEffect } from 'react'
 import Container from './components/Container'
-import Spot from './components/Spot'
+import Art from './components/Art'
 import LoginForm from './components/LoginForm'
-import spotService from './services/spots'
+import artService from './services/arts'
 import loginService from './services/login'
 
 const App = () => {
-  const [spots, setSpots] = useState([])
-  const [newActivity, setNewActivity] = useState('')
-  const [newLocation, setNewLocation] = useState('')
+  const [arts, setArts] = useState([])
+  const [newPiece, setNewPiece] = useState('')
+  const [newDescription, setNewDescription] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
-    spotService
+    artService
       .getAll()
-      .then(initialSpots => {
-      setSpots(initialSpots)
+      .then(initialArts => {
+      setArts(initialArts)
     })
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedSpotappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedArtappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      spotService.setToken(user.token)
+      artService.setToken(user.token)
     }
   }, [])
 
@@ -40,9 +40,9 @@ const App = () => {
       })
 
       window.localStorage.setItem(
-        'loggedSpotappUser', JSON.stringify(user)
+        'loggedArtappUser', JSON.stringify(user)
       ) 
-      spotService.setToken(user.token)
+      artService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -51,31 +51,31 @@ const App = () => {
     console.log('logging in with', username, password)
   }
 
-  const addSpot = (event) => {
+  const addArt = (event) => {
     event.preventDefault()
-    const spotObject = {
-      activity: newActivity,
-      location: newLocation,
+    const artObject = {
+      piece: newPiece,
+      description: newDescription,
       date: new Date().toISOString(),
     }
 
-    spotService
-      .create(spotObject)
-        .then(returnedSpot => {
-        setSpots(spots.concat(returnedSpot))
-        setNewActivity('')
-        setNewLocation('')
+    artService
+      .create(artObject)
+        .then(returnedArt => {
+        setArts(arts.concat(returnedArt))
+        setNewPiece('')
+        setNewDescription('')
       })
   }
 
-  const handleActivityChange = (event) => {
+  const handlePieceChange = (event) => {
     console.log(event.target.value)
-    setNewActivity(event.target.value)
+    setNewPiece(event.target.value)
   }
 
-  const handleLocationChange = (event) => {
+  const handleDescriptionChange = (event) => {
     console.log(event.target.value)
-    setNewLocation(event.target.value)
+    setNewDescription(event.target.value)
   }
 
   const loginForm = () => {
@@ -101,17 +101,17 @@ const App = () => {
     )
 }
 
-  const spotForm = () => (
-    <form onSubmit={addSpot}>
+  const artForm = () => (
+    <form onSubmit={addArt}>
       <input
-        value={newActivity}
-        onChange={handleActivityChange}
-        placeholder="activity"
+        value={newPiece}
+        onChange={handlePieceChange}
+        placeholder="piece"
       />
       <input
-        value={newLocation}
-        onChange={handleLocationChange}
-        placeholder="location"
+        value={newDescription}
+        onChange={handleDescriptionChange}
+        placeholder="description"
       />
       <button type="submit">save</button>
     </form>  
@@ -120,21 +120,21 @@ const App = () => {
   return (
     <Container>
       <div class="block space-y-8">
-        <h1 class="font-bold">Weekend</h1>
+        <h1 class="font-bold">Sunday Scribbles</h1>
 
         {user === null ?
           loginForm() : 
           <div>
             <p>Hello, {user.name}</p>
-            {spotForm()}
+            {artForm()}
           </div>
         }
 
         <ul class="list-decimal list-inside">
-          {spots.map(spot => 
-              <Spot
-                key={spot.id}
-                spot={spot} 
+          {arts.map(art => 
+              <Art
+                key={art.id}
+                art={art} 
               />
           )}
         </ul>

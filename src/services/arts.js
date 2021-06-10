@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/spots'
+const baseUrl = '/api/arts'
 
 let token = null
 
