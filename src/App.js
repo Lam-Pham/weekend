@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Layout from './components/Layout'
 import Container from './components/Container'
 import Art from './components/Art'
 import Collection from './components/Collection'
@@ -134,37 +135,39 @@ const App = () => {
   )
 
   return (
-    <Container>
-      <div class="block space-y-8">
-        <h1 class="font-bold">Sunday Scribbles</h1>
+    <Layout>
+      <Container>
+        <div class="block space-y-8">
+          <h1 class="font-bold">Sunday Scribbles</h1>
 
-        {user === null ?
-          loginForm() : 
-          <div>
-            <p>Hello, {user.username}</p>
-            {artForm()}
-          </div>
-        }
+          {user === null ?
+            loginForm() : 
+            <div>
+              <p>Hello, {user.username}</p>
+              {artForm()}
+            </div>
+          }
 
-        <ul class="list-decimal list-inside">
-          {collections.map(collection => 
-              <Collection
-                key={collection.id}
-                collection={collection} 
-              />
-          )}
-        </ul>
+          <ul class="list-decimal list-inside">
+            {collections.map(collection => 
+                <Collection
+                  key={collection.id}
+                  collection={collection} 
+                />
+            )}
+          </ul>
 
-        <ul class="list-decimal list-inside">
-          {arts.map(art => 
-              <Art
-                key={art.id}
-                art={art} 
-              />
-          )}
-        </ul>
-      </div>
-    </Container>
+          <ul class="list-decimal list-inside">
+            {arts.map(art => 
+                <Art
+                  key={art.id}
+                  art={art} 
+                />
+            )}
+          </ul>
+        </div>
+      </Container>
+    </Layout>
   )
 }
 
