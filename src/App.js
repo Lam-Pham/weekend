@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import Container from './components/Container'
 import Art from './components/Art'
+import Collection from './components/Collection'
 import LoginForm from './components/LoginForm'
+
 import artService from './services/arts'
 import loginService from './services/login'
+import collectionService from './services/collections'
 
 const App = () => {
   const [arts, setArts] = useState([])
   const [newPiece, setNewPiece] = useState('')
   const [newDescription, setNewDescription] = useState('')
+
+  const [collections, setCollections] = useState([])
+
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
@@ -19,6 +25,14 @@ const App = () => {
       .getAll()
       .then(initialArts => {
       setArts(initialArts)
+    })
+  }, [])
+
+  useEffect(() => {
+    collectionService
+      .getAll()
+      .then(initialCollections => {
+      setCollections(initialCollections)
     })
   }, [])
 
@@ -104,11 +118,13 @@ const App = () => {
   const artForm = () => (
     <form onSubmit={addArt}>
       <input
+        class ="rounded border-2 border-gray-300 bg-blue-50"
         value={newPiece}
         onChange={handlePieceChange}
         placeholder="piece"
       />
       <input
+        class ="rounded border-2 border-gray-300 bg-blue-50"
         value={newDescription}
         onChange={handleDescriptionChange}
         placeholder="description"
@@ -125,10 +141,19 @@ const App = () => {
         {user === null ?
           loginForm() : 
           <div>
-            <p>Hello, {user.name}</p>
+            <p>Hello, {user.username}</p>
             {artForm()}
           </div>
         }
+
+        <ul class="list-decimal list-inside">
+          {collections.map(collection => 
+              <Collection
+                key={collection.id}
+                collection={collection} 
+              />
+          )}
+        </ul>
 
         <ul class="list-decimal list-inside">
           {arts.map(art => 
