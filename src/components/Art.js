@@ -2,7 +2,7 @@
 export default function Art ({ art }) {
 
   return (
-    <li className='art'>
+    <li>
       {art.piece} - {art.description} 
     </li>
   )
