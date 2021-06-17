@@ -4,6 +4,8 @@ import Container from './components/Container'
 import Art from './components/Art'
 import Collection from './components/Collection'
 import LoginForm from './components/LoginForm'
+import Landing from './components/Landing'
+import Header from './components/Header'
 
 import artService from './services/arts'
 import loginService from './services/login'
@@ -137,8 +139,10 @@ const App = () => {
   return (
     <Layout>
       <Container>
+        <Header/>
+        <Landing latestCollection={collections[0] || {}} />                               
         <div class="block space-y-8">
-          <h1 class="font-bold">Sunday Scribbles</h1>
+          <h1 class="font-bold text-3xl tracking-widest">SUNDAY SCRIBBLES</h1> 
 
           {user === null ?
             loginForm() : 
