@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom'
 import Layout from './components/Layout'
 import Container from './components/Container'
 import Art from './components/Art'
 import Collection from './components/Collection'
 import LoginForm from './components/LoginForm'
 import Landing from './components/Landing'
-import Header from './components/Header'
 
 import artService from './services/arts'
 import loginService from './services/login'
 import collectionService from './services/collections'
+
+
 
 const App = () => {
   const [arts, setArts] = useState([])
@@ -139,7 +146,26 @@ const App = () => {
   return (
     <Layout>
       <Container>
-        <Header/>
+        <Router>
+          <div class="grid grid-cols-3">
+            <p class="col-span-1 text-xl tracking-widest">SUNDAY SCRIBBLES</p>
+            <div class="space-x-4 col-start-3 flex flex-row-reverse gap-8">
+                <Link to="/projects">Projects</Link>
+                <Link to="/about">About</Link>
+            </div>
+          </div>
+          <Switch>
+              <Route path="/projects">
+                  <Landing latestCollection={collections[1] || {}}/>             
+              </Route>
+              <Route path="/about">
+                  <Landing/>
+              </Route>
+              <Route path="/">
+                  <Landing latestCollection={collections[0] || {}}/>
+              </Route>
+          </Switch>
+        </Router>
         <Landing latestCollection={collections[0] || {}} />                               
         <div class="block space-y-8">
           <h1 class="font-bold text-3xl tracking-widest">SUNDAY SCRIBBLES</h1> 

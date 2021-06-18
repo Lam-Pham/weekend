@@ -6,7 +6,7 @@ export default function Collection ({collection}) {
             <p>who 👋🏼<br/><span class="font-bold">{collection.title}</span></p>
             <p>what 👀<br/><span class="font-bold">{collection.description}</span></p>
             <p>commission 🎉<br/><span class="font-bold">{collection.commission}</span></p>
-            <button class="rounded-full bg-yellow-200 hover:bg-yellow-300 py-2 px-4">View project</button>
+            <button class="rounded-full border-2 border-black hover:bg-yellow-300 py-2 px-4">View project</button>
         </div>
     )
 }
