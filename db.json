@@ -1,0 +1,16 @@
+{
+  "spots": [
+    {
+      "activity": "Eat sushi",
+      "location": "Hilltop Park",
+      "date": "2021-05-24T03:09:20.902Z",
+      "id": 1
+    },
+    {
+      "activity": "Ride bikes",
+      "location": "El Dorado Park",
+      "date": "2021-05-24T03:09:37.754Z",
+      "id": 2
+    }
+  ]
+}
