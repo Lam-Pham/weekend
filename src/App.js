@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
 import Layout from './components/Layout'
 import Container from './components/Container'
-import Art from './components/Art'
-import Collection from './components/Collection'
 import LoginForm from './components/LoginForm'
 import Landing from './components/Landing'
+import Header from './components/Header'
+import Projects from './components/Projects'
 
 import artService from './services/arts'
 import loginService from './services/login'
@@ -147,16 +146,10 @@ const App = () => {
     <Layout>
       <Container>
         <Router>
-          <div class="grid grid-cols-3">
-            <p class="col-span-1 text-xl tracking-widest">SUNDAY SCRIBBLES</p>
-            <div class="space-x-4 col-start-3 flex flex-row-reverse gap-8">
-                <Link to="/projects">Projects</Link>
-                <Link to="/about">About</Link>
-            </div>
-          </div>
+          <Header/>
           <Switch>
               <Route path="/projects">
-                  <Landing latestCollection={collections[1] || {}}/>             
+                  <Projects projects={collections || {}}/>             
               </Route>
               <Route path="/about">
                   <Landing/>
@@ -166,7 +159,7 @@ const App = () => {
               </Route>
           </Switch>
         </Router>
-        <Landing latestCollection={collections[0] || {}} />                               
+                                    
         <div class="block space-y-8">
           <h1 class="font-bold text-3xl tracking-widest">SUNDAY SCRIBBLES</h1> 
 
@@ -178,23 +171,6 @@ const App = () => {
             </div>
           }
 
-          <ul class="list-decimal list-inside">
-            {collections.map(collection => 
-                <Collection
-                  key={collection.id}
-                  collection={collection} 
-                />
-            )}
-          </ul>
-
-          <ul class="list-decimal list-inside">
-            {arts.map(art => 
-                <Art
-                  key={art.id}
-                  art={art} 
-                />
-            )}
-          </ul>
         </div>
       </Container>
     </Layout>

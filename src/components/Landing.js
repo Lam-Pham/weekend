@@ -26,7 +26,7 @@ export default function Landing (props) {
             </div>
             
             <div class="space-y-4">
-                <p class="text-3xl">featured project</p>
+                <p class="text-3xl">featured</p>
                 <Collection collection={props.latestCollection}/>
             </div>
             
