@@ -9,48 +9,47 @@ import Container from './components/Container'
 import LoginForm from './components/LoginForm'
 import Landing from './components/Landing'
 import Header from './components/Header'
-import Projects from './components/Projects'
+import AllLeagues from './components/AllLeagues'
 
-import artService from './services/arts'
+import teamService from './services/teams'
 import loginService from './services/login'
-import collectionService from './services/collections'
+import leagueService from './services/leagues'
 
 
 
 const App = () => {
-  const [arts, setArts] = useState([])
-  const [newPiece, setNewPiece] = useState('')
-  const [newDescription, setNewDescription] = useState('')
+  const [teams, setTeams] = useState([])
+  const [teamName, setTeamName] = useState('')
 
-  const [collections, setCollections] = useState([])
+  const [leagues, setLeagues] = useState([])
 
-  const [username, setUsername] = useState('') 
+  const [email, setEmail] = useState('') 
   const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)
+  const [player, setPlayer] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
-    artService
+    teamService
       .getAll()
-      .then(initialArts => {
-      setArts(initialArts)
+      .then(initialTeams => {
+      setTeams(initialTeams)
     })
   }, [])
 
   useEffect(() => {
-    collectionService
+    leagueService
       .getAll()
-      .then(initialCollections => {
-      setCollections(initialCollections)
+      .then(initialLeagues => {
+      setLeagues(initialLeagues)
     })
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedArtappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      artService.setToken(user.token)
+    const loggedPlayerJSON = window.localStorage.getItem('loggedPlayer')
+    if (loggedPlayerJSON) {
+      const player = JSON.parse(loggedPlayerJSON)
+      setPlayer(player)
+      teamService.setToken(player.token)
     }
   }, [])
 
@@ -58,47 +57,39 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username, password,
+      const player = await loginService.login({
+         email, password
       })
 
       window.localStorage.setItem(
-        'loggedArtappUser', JSON.stringify(user)
+        'loggedPlayer', JSON.stringify(player)
       ) 
-      artService.setToken(user.token)
-      setUser(user)
-      setUsername('')
+      teamService.setToken(player.token)
+      setPlayer(player)
+      setEmail('')
       setPassword('')
     } catch (exception) {
     }
-    console.log('logging in with', username, password)
   }
 
-  const addArt = (event) => {
+  const addTeam = (event) => {
     event.preventDefault()
-    const artObject = {
-      piece: newPiece,
-      description: newDescription,
+    const teamObject = {
+      name: teamName,
       date: new Date().toISOString(),
     }
 
-    artService
-      .create(artObject)
-        .then(returnedArt => {
-        setArts(arts.concat(returnedArt))
-        setNewPiece('')
-        setNewDescription('')
+    teamService
+      .create(teamObject)
+        .then(returnedTeam => {
+        setTeams(teams.concat(returnedTeam))
+        setTeamName('')
       })
   }
 
-  const handlePieceChange = (event) => {
+  const handleTeamNameChange = (event) => {
     console.log(event.target.value)
-    setNewPiece(event.target.value)
-  }
-
-  const handleDescriptionChange = (event) => {
-    console.log(event.target.value)
-    setNewDescription(event.target.value)
+    setTeamName(event.target.value)
   }
 
   const loginForm = () => {
@@ -112,9 +103,9 @@ const App = () => {
         </div>
         <div style={showWhenVisible}>
           <LoginForm
-            username={username}
             password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
+            email={email}
+            handleEmailChange={({ target }) => setEmail(target.value)}
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleSubmit={handleLogin}
           />
@@ -124,19 +115,13 @@ const App = () => {
     )
 }
 
-  const artForm = () => (
-    <form onSubmit={addArt}>
+  const teamForm = () => (
+    <form onSubmit={addTeam}>
       <input
         class ="rounded border-2 border-gray-300 bg-blue-50"
-        value={newPiece}
-        onChange={handlePieceChange}
-        placeholder="piece"
-      />
-      <input
-        class ="rounded border-2 border-gray-300 bg-blue-50"
-        value={newDescription}
-        onChange={handleDescriptionChange}
-        placeholder="description"
+        value={teamName}
+        onChange={handleTeamNameChange}
+        placeholder="team name"
       />
       <button type="submit">save</button>
     </form>  
@@ -148,14 +133,14 @@ const App = () => {
         <Router>
           <Header/>
           <Switch>
-              <Route path="/projects">
-                  <Projects projects={collections || {}}/>             
+              <Route path="/leagues">
+                  <AllLeagues leagues={leagues || {}}/>             
               </Route>
               <Route path="/about">
                   <Landing/>
               </Route>
               <Route path="/">
-                  <Landing latestCollection={collections[0] || {}}/>
+                  <Landing latestLeague={leagues[0] || {}}/>
               </Route>
           </Switch>
         </Router>
@@ -163,11 +148,11 @@ const App = () => {
         <div class="block space-y-8">
           <h1 class="font-bold text-3xl tracking-widest">SUNDAY SCRIBBLES</h1> 
 
-          {user === null ?
+          {player === null ?
             loginForm() : 
             <div>
-              <p>Hello, {user.username}</p>
-              {artForm()}
+              <p>Hello, {player.name}</p>
+              {teamForm()}
             </div>
           }
 

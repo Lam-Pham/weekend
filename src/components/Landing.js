@@ -1,4 +1,4 @@
-import Collection from "./Collection"
+import League from "./League"
 import {
     BrowserRouter as Router,
     Switch,
@@ -19,7 +19,7 @@ export default function Landing (props) {
                     </div>
                     <div>
                         <p class="inline">Artists → </p>
-                        <Router><Link to="/projects"><button class="text-2xl rounded-full border-2 border-black hover:bg-yellow-300 py-2 px-4">View Projects</button></Link></Router>
+                        <Router><Link to="/leagues"><button class="text-2xl rounded-full border-2 border-black hover:bg-yellow-300 py-2 px-4">View Leagues</button></Link></Router>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@ export default function Landing (props) {
             
             <div class="space-y-4">
                 <p class="text-3xl">featured</p>
-                <Collection collection={props.latestCollection}/>
+                <League league={props.latestLeague}/>
             </div>
             
         </div>

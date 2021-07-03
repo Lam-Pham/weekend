@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/arts'
+const baseUrl = '/api/teams'
 
 let token = null
 
