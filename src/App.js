@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import {
-  BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  useRouteMatch
 } from 'react-router-dom'
 import Layout from './components/Layout'
 import Container from './components/Container'
 import LoginForm from './components/LoginForm'
 import Landing from './components/Landing'
 import Header from './components/Header'
-import AllLeagues from './components/AllLeagues'
+import League from './components/League'
+import Leagues from './components/Leagues'
 
 import teamService from './services/teams'
 import loginService from './services/login'
@@ -127,27 +128,31 @@ const App = () => {
     </form>  
   )
 
+  const match = useRouteMatch('/leagues/:url')
+  const league = match 
+    ? leagues.find(league => league.url === String(match.params.url))
+    : null
+
   return (
     <Layout>
       <Container>
-        <Router>
-          <Header/>
-          <Switch>
-              <Route path="/leagues">
-                  <AllLeagues leagues={leagues || {}}/>             
-              </Route>
-              <Route path="/about">
-                  <Landing/>
-              </Route>
-              <Route path="/">
-                  <Landing latestLeague={leagues[0] || {}}/>
-              </Route>
-          </Switch>
-        </Router>
-                                    
+        <Header/>
+        <Switch>
+            <Route path="/leagues/:url">
+                <League league={league}/>             
+            </Route>
+            <Route path="/leagues">
+                <Leagues leagues={leagues || {}}/>             
+            </Route>
+            <Route path="/about">
+                <Landing/>
+            </Route>
+            <Route path="/">
+                <Landing latestLeague={leagues[0] || {}}/>
+            </Route>
+        </Switch>
+                                  
         <div class="block space-y-8">
-          <h1 class="font-bold text-3xl tracking-widest">SUNDAY SCRIBBLES</h1> 
-
           {player === null ?
             loginForm() : 
             <div>
@@ -155,7 +160,6 @@ const App = () => {
               {teamForm()}
             </div>
           }
-
         </div>
       </Container>
     </Layout>
